@@ -34,14 +34,18 @@ function drawBoard() {
 function drawPieces() {
 	tank = [];
 	tank[0] = document.getElementById("tank0");
-	setPosition(tank[0],3,0);
+	setPosition(tank[0],3,0,180);
 	console.log("tank moved to " + tank[0].style['top'] + " which is " + (document.body.clientHeight / tileY / 2 - pieceSize/2));
 }
-function setPosition(element, x, y) {
+function setPosition(element, x, y,rot) {
 	var gameBoard = document.getElementById('board');
+	if(!rot) {
+		rot = "0";
+	}
 	
 	element.style['top'] = (h / tileY)*(y) + (h / tileY)/2 - pieceSize/2 + "px";
 	element.style['left'] = (w / tileX)*(x)  + (w / tileX)/2 - pieceSize/2 + "px";
+	element.style['-webkit-transform'] = "rotate(" + rot + "deg)";
 }
 
 </script>
@@ -52,7 +56,7 @@ function setPosition(element, x, y) {
 canvas {border-radius:25px;border:1px solid black;margin:auto auto;}
 .pawn {position:absolute;
 	-webkit-transition-property: all;
-	-webkit-transition-duration: 1.5s;
+	-webkit-transition-duration: 3s;
 	}
 body {overflow:hidden;}
 </style>
