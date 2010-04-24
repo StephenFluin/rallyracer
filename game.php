@@ -78,6 +78,7 @@ function runEventQueueInstance(data) {
 			
 	} else {
 		debug("No data in event queue.");
+		window.setTimeout(runEventQueue,1000);
 	}
 }
 function debug(msg) {
@@ -92,6 +93,7 @@ function addMovement(x,y,rot) {
 	
 	
 	$.get("event-server.php?action=addPending&x=" +x +"&y=" + y+"&rot=" + rot);
+	console.log("AJAX GET sent to: " + "event-server.php?action=addPending&x=" +x +"&y=" + y+"&rot=" + rot);
 }
 function left() {addMovement(-1);}
 function right() {addMovement(1);}
@@ -100,7 +102,7 @@ function down() {addMovement(0,1);}
 function clock() {addMovement(0,0,90);}
 function counterclock() {addMovement(0,0,-90);}
 
-window.setInterval(runEventQueue,1000);
+window.setTimeout(runEventQueue,1000);
 </script>
 
 <style>
