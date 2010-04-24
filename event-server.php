@@ -1,9 +1,10 @@
 <?php
 require("functions.inc.php");
+$db = new DB();
 
 $action = $_GET["action"];
-$db = new DB();
 if($action == "getPending") {
+	processEvents();
 	$data = array();	
 	$db->query("SELECT unit,x,y,rot FROM pending_event;");
 	while($row = $db->fetchassoc()) {
@@ -11,6 +12,7 @@ if($action == "getPending") {
 	}
 	//$data[] = array(array('id'=>'0','x'=>5,'y'=>4,'rot'=>270));
 	//$data[] = array(array('id'=>'0','x'=>10,'y'=>8,'rot'=>90));
+
 	print json_encode($data);
 
 
