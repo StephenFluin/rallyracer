@@ -9,7 +9,7 @@ var tileY = 10;
 var pieceSize = 54;
 var h, w;
 
-function draw() {
+function initialDraw() {
 	drawBoard();
 	drawPieces();
 }
@@ -67,7 +67,7 @@ canvas {border-radius:25px;border:1px solid black;margin:auto auto;}
 body {overflow:hidden;}
 </style>
 </head>
-<body onload="draw()">
+<body onload="initalDraw()">
 <div id="pane">
 <canvas id="board" width="1200" height="800">
 You should upgrade to a browser that supports the internet.</canvas>
