@@ -2,6 +2,7 @@
 <html>
 <head>
 <title>Rally Racer Web</title>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 var tileX = 12;
 var tileY = 10;
@@ -48,6 +49,11 @@ function setPosition(element, x, y,rot) {
 	element.style['-webkit-transform'] = "rotate(" + rot + "deg)";
 }
 
+function runEventQueue() {
+	$.getJSON('event-server.php',function (data) {
+		
+	});
+}
 </script>
 
 <style>
