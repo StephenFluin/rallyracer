@@ -2,7 +2,6 @@
 
 require("functions.inc.php");
 $db = new DB();
-session_destroy();
 $action = $_GET["action"];
 
 $directions = array("f","b","r","l");
@@ -48,9 +47,10 @@ switch($action) {
 		$orders = explode(";",$cmd);
 		$round = 0;
 		foreach($orders as $order) {
-			list($p,$a,$q) = explode(",",$order);
-			$db->query("INSERT INTO desired_event (unit, priority, action, quantity, round) VALUES ('$unit','$p', '$a', '$q','$round');");
-			$round++;
+			if( list($p,$a,$q) = explode(",",$order)) {
+				$db->query("INSERT INTO desired_event (unit, priority, action, quantity, round) VALUES ('$unit','$p', '$a', '$q','$round');");
+				$round++;
+			}
 		}
 		print "{}";
 		break;

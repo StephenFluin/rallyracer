@@ -73,11 +73,13 @@ function processEvents() {
 	// Check if we have all players.
 	$db->query("SELECT max(unit) FROM player");
 	list($players) = $db->fetchrow();
-	$players += 1;
-	if($players > 0) {
+	if($players != "") {
+		$players += 1;
+	}
+	for($player = 0;$player < $players;$player++) {
 	
-		$pos = $_SESSION["positions"][0];
-		$db->query("SELECT unit, priority, action, quantity, round FROM desired_event ORDER BY id ASC;");
+		$pos = $_SESSION["positions"][$player];
+		$db->query("SELECT unit, priority, action, quantity, round FROM desired_event WHERE unit='$player' ORDER BY id ASC;");
 		while(list($u, $p,$a,$q, $round) = $db->fetchrow()) {
 			for($i = 0;$i < $q;$i++) {
 				$xChange = $yChange = $rotChange = 0;
@@ -111,10 +113,10 @@ function processEvents() {
 				
 				//print "xchange is $xChange, ychange is $yChange, rotChange is $rotChange.<br/>\n";
 			}
-			$db2->query("INSERT INTO pending_event (x,y,rot, round) VALUES ('$x','$y','$rot', '$round');");
+			$db2->query("INSERT INTO pending_event (unit, x,y,rot, round) VALUES ('$u','$x','$y','$rot', '$round');");
 		}
-		$db->query("DELETE FROM desired_event where gameid=0;");
-		$_SESSION["positions"][0] = $pos;
+		$db->query("DELETE FROM desired_event where gameid=0 and unit='$player';");
+		$_SESSION["positions"][$player] = $pos;
 	}
 }
 
