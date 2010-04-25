@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-<?php require("functions.inc.php");$_SESSION["positions"] = null; ?>
+<?php 
+require("functions.inc.php");
+$_SESSION["positions"] = null;
+?>
 <head>
 <title>Rally Racer Web</title>
 <script src="http://code.jquery.com/jquery-latest.js"></script>

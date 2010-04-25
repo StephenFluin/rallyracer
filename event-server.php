@@ -25,5 +25,7 @@ if($action == "getPending") {
 	$rot = $db->escape($_GET["rot"]);
 	$db->query("INSERT INTO pending_event (unit, x, y, rot) VALUES ('$unit', '$x', '$y', '$rot');");
 	
+} else if ($action == "resetEverything") {
+	
 }
 

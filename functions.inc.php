@@ -42,6 +42,9 @@ class DB {
         function escape($string) {
                 return mysql_real_escape_string($string);
         }
+        function insertid() {
+		return mysql_insert_id($this->conn);
+	}
 }
 
 /* This is run every 1 second does detection of game events that affect the board, or everyone.
@@ -54,7 +57,7 @@ function processEvents() {
 	*/
 	if(!$_SESSION["positions"]) {
 		$_SESSION["positions"] = array();
-		$_SESSION["positions"][] = array(11,-90,180);
+		$_SESSION["positions"][] = array(4,4,180);
 		
 		updatePositions();
 	}
