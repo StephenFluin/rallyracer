@@ -76,47 +76,52 @@ function processEvents() {
 	if($players != "") {
 		$players += 1;
 	}
-	for($player = 0;$player < $players;$player++) {
+	$db->query("SELECT count(*) FROM desired_event WHERE gameid='0'");
+	list($count) = $db->fetchrow();
 	
-		$pos = $_SESSION["positions"][$player];
-		$db->query("SELECT unit, priority, action, quantity, round FROM desired_event WHERE unit='$player' ORDER BY id ASC;");
-		while(list($u, $p,$a,$q, $round) = $db->fetchrow()) {
-			for($i = 0;$i < $q;$i++) {
-				$xChange = $yChange = $rotChange = 0;
+	if($players > 0 && $count >= $players * 5) {
+		for($player = 0;$player < $players;$player++) {
+		
+			$pos = $_SESSION["positions"][$player];
+			$db->query("SELECT unit, priority, action, quantity, round FROM desired_event WHERE unit='$player' ORDER BY id ASC;");
+			while(list($u, $p,$a,$q, $round) = $db->fetchrow()) {
+				for($i = 0;$i < $q;$i++) {
+					$xChange = $yChange = $rotChange = 0;
+					
+					switch($a) {
+						case "b":
+						case "f":
+							// 90 - flips direction of rotation for true math and javascript
+							$yChange = -1*sin(deg2rad(90-$pos[2]));
+							$xChange = cos(deg2rad(90-$pos[2]));
+							
+							if($a =="b"){
+								$xChange *= -1;
+								$yChange *= -1;
+							}
+						break;
 				
-				switch($a) {
-					case "b":
-					case "f":
-						// 90 - flips direction of rotation for true math and javascript
-						$yChange = -1*sin(deg2rad(90-$pos[2]));
-						$xChange = cos(deg2rad(90-$pos[2]));
 						
-						if($a =="b"){
-							$xChange *= -1;
-							$yChange *= -1;
-						}
-					break;
-			
+						case "r":
+							$rotChange = 90;
+						break;
+						
+						case "l":
+							$rotChange = -90;
+						break;
+					}
+					//print "From: $pos[0]x$pos[1] with $pos[2], we are acting on $a.<br/>\n";
+					$x = $pos[0] += $xChange;
+					$y = $pos[1] += $yChange;
+					$rot = $pos[2] += $rotChange;
 					
-					case "r":
-						$rotChange = 90;
-					break;
-					
-					case "l":
-						$rotChange = -90;
-					break;
+					//print "xchange is $xChange, ychange is $yChange, rotChange is $rotChange.<br/>\n";
 				}
-				//print "From: $pos[0]x$pos[1] with $pos[2], we are acting on $a.<br/>\n";
-				$x = $pos[0] += $xChange;
-				$y = $pos[1] += $yChange;
-				$rot = $pos[2] += $rotChange;
-				
-				//print "xchange is $xChange, ychange is $yChange, rotChange is $rotChange.<br/>\n";
+				$db2->query("INSERT INTO pending_event (unit, x,y,rot, round) VALUES ('$u','$x','$y','$rot', '$round');");
 			}
-			$db2->query("INSERT INTO pending_event (unit, x,y,rot, round) VALUES ('$u','$x','$y','$rot', '$round');");
+			$db->query("DELETE FROM desired_event where gameid=0 and unit='$player';");
+			$_SESSION["positions"][$player] = $pos;
 		}
-		$db->query("DELETE FROM desired_event where gameid=0 and unit='$player';");
-		$_SESSION["positions"][$player] = $pos;
 	}
 }
 

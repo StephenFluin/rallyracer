@@ -2,7 +2,7 @@
 <html>
 <?php 
 require("functions.inc.php");
-$_SESSION["positions"] = null;
+session_destroy();
 $db->query("TRUNCATE TABLE player;");
 ?>
 <head>
@@ -62,6 +62,7 @@ function setPosition(element, x, y,rot) {
 
 function runEventQueue() {
 	debug("Event queue running.");
+	console.log("Event queue running.");
 	$.getJSON('event-server.php?action=getPending',runEventQueueInstance);
 	
 	//runEventQueueInstance([[{id:"tank0",x:5,y:4,rot:270}],[{id:"tank0",x:10,y:8,rot:90}]]);
@@ -78,12 +79,13 @@ rot
 function runEventQueueInstance(data) {
 	if(data && data.length > 0 ) {
 		debug("processing event queue with " + data.length + " items.");
-		//console.log("Processing from server: ");
-		//console.log(data);
+		console.log("Processing from server: ");
+		console.log(data);
 	} else {
 		if(!data) {
-			console.log("inavalid data received from server.");
+			console.log("invalid data received from server.");
 		}
+		console.log("No data, or data length was " + data.length);
 	}
 	
 	if(data.length > 0) {
