@@ -19,7 +19,7 @@ switch($action) {
 		
 		$orders = explode(";",$cmd);
 		foreach($orders as $order) {
-			list($p,$a,$q) = explode(" ",$order);
+			list($p,$a,$q) = explode(",",$order);
 			$db->query("INSERT INTO desired_event (priority, action, quantity) VALUES ('$p', '$a', '$q');");
 		}
 		

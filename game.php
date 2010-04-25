@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<?php require("functions.inc.php");$_SESSION["positions"] = null; ?>
 <head>
 <title>Rally Racer Web</title>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -35,10 +36,11 @@ function drawBoard() {
 function drawPieces() {
 	tank = [];
 	tank[0] = document.getElementById("tank0");
-	setPosition(tank[0],3,0,180);
+	//setPosition(tank[0],3,0,180);
 	
 }
 function setPosition(element, x, y,rot) {
+	debug("setposition to " + x + "x" + y + " and " + rot + ".");
 	var gameBoard = document.getElementById('board');
 	if(!rot) {
 		rot = "0";
@@ -54,8 +56,10 @@ function setPosition(element, x, y,rot) {
 }
 
 function runEventQueue() {
+	debug("Event queue running.");
 	$.getJSON('event-server.php?action=getPending',runEventQueueInstance);
 	//runEventQueueInstance([[{id:"tank0",x:5,y:4,rot:270}],[{id:"tank0",x:10,y:8,rot:90}]]);
+	
 }
 
 /*
@@ -131,7 +135,7 @@ You should upgrade to a browser that supports the internet.</canvas>
 
 
 
-<div id="debug"></div>
+<div id="debug">Debug Data</div>
 
 </body>
 </html>
