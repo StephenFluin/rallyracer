@@ -5,13 +5,29 @@ $db = new DB();
 $action = $_GET["action"];
 if($action == "getPending") {
 	processEvents();
-	$data = array();	
-	$db->query("SELECT unit,x,y,rot FROM pending_event;");
+	$round = array();
+	$previousRound = 0;
+	$db->query("SELECT unit,x,y,rot,round FROM pending_event ORDER BY round ASC;");
 	while($row = $db->fetchassoc()) {
-		$data[] = array($row);
+		if($row["round"] != $previousRound) {
+			$data[] = $round;
+			$round = array();
+		}
+		$round[] = $row;
 	}
-	//$data[] = array(array('id'=>'0','x'=>5,'y'=>4,'rot'=>270));
-	//$data[] = array(array('id'=>'0','x'=>10,'y'=>8,'rot'=>90));
+	
+	if($round) {
+		$data[] = $round;
+	}
+	if($db->size() == 0) {
+		$data = array();
+	}
+	
+	
+	//Data we send should look like: 
+	// [[{"unit":"0","x":"4","y":"4","rot":"180"},{"unit":"1","x":"5","y":"4","rot":"180"},{"unit":"2","x":"6","y":"4","rot":"180"}]]
+	// This structure breaks down as:
+	// Rounds[Round[obj]]
 
 	print json_encode($data);
 

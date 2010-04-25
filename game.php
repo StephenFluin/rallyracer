@@ -3,6 +3,7 @@
 <?php 
 require("functions.inc.php");
 $_SESSION["positions"] = null;
+$db->query("TRUNCATE TABLE player;");
 ?>
 <head>
 <title>Rally Racer Web</title>
@@ -44,6 +45,7 @@ function drawPieces() {
 }
 function setPosition(element, x, y,rot) {
 	debug("setposition to " + x + "x" + y + " and " + rot + ".");
+	console.log("Settings position of " + element + " to " + x + "x" + y + " and " + rot + ".");
 	var gameBoard = document.getElementById('board');
 	if(!rot) {
 		rot = "0";
@@ -61,6 +63,7 @@ function setPosition(element, x, y,rot) {
 function runEventQueue() {
 	debug("Event queue running.");
 	$.getJSON('event-server.php?action=getPending',runEventQueueInstance);
+	
 	//runEventQueueInstance([[{id:"tank0",x:5,y:4,rot:270}],[{id:"tank0",x:10,y:8,rot:90}]]);
 	
 }
@@ -73,12 +76,21 @@ y
 rot
 */
 function runEventQueueInstance(data) {
-	if(data ) debug("processing event queue with " + data.length + " items.");
-	else debug("invalid response from server.");
+	if(data && data.length > 0 ) {
+		debug("processing event queue with " + data.length + " items.");
+		//console.log("Processing from server: ");
+		//console.log(data);
+	} else {
+		if(!data) {
+			console.log("inavalid data received from server.");
+		}
+	}
+	
 	if(data.length > 0) {
 		event = data.shift();
+		console.log(event);
 		for(var i = 0;i<event.length;i++) {
-			var obj = document.getElementById("tank" + event[0].unit);
+			var obj = document.getElementById("tank" + event[i].unit);
 			setPosition(obj,event[i].x,event[i].y,event[i].rot);
 		}
 		window.setTimeout(function () {runEventQueueInstance(data)},3000);
@@ -128,13 +140,9 @@ body {overflow:hidden;}
 <canvas id="board" width="1200" height="800">
 You should upgrade to a browser that supports the internet.</canvas>
 <img src="images/tank0.png" alt="Tank 0" id="tank0" class="pawn"/>
+<img src="images/tank1.png" alt="Tank 1" id="tank1" class="pawn"/>
+<img src="images/tank2.png" alt="Tank 2" id="tank2" class="pawn"/>
 </div>
-<button onclick="left()">left</button>
-<button onclick="up()">up</button>
-<button onclick="down()">down</button>
-<button onclick="right()">right</button>
-<button onclick="clock()">clock</button>
-<button onclick="counterclock()">counterclock</button>
 
 
 

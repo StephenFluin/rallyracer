@@ -1,7 +1,8 @@
 <?php
+
 require("functions.inc.php");
 $db = new DB();
-
+session_destroy();
 $action = $_GET["action"];
 
 $directions = array("f","b","r","l");
@@ -10,13 +11,19 @@ $_SESSION["quantity"]++;
 switch($action) {
 	case "connectToGame":
 		if(!$_SESSION["playerid"]) {
-			$db->query("SELECT max(unit) FROM player WHERE gameid=0;");
+			$db->query("SELECT max(unit) FROM player WHERE gameid='0';");
+			
 			list($maxunit) = $db->fetchrow();
-			if($maxunit == "NULL") {
-				$unit = 0;
-			} else {
+			if($maxunit != "") {
 				$unit = $maxunit + 1;
+				//print "maxunit existed, incrementing by 1.";
+			} else {
+				$unit = 0;
+				//print "maxunit was '$maxunit'.";
 			}
+
+				
+
 			$db->query("INSERT INTO player (unit) VALUES ('$unit');");
 			$_SESSION["playerid"] = $db->insertid();
 			$_SESSION["unit"] = $unit;
@@ -32,16 +39,18 @@ switch($action) {
 		}
 		print json_encode($data);
 		break;
-	case waitForStartGame:
+	case "waitForStartGame":
 		print "{}";
 		break;
 	case "sendCommand":
 		$cmd = $db->escape($_GET["command"]);
-		
+		$unit = $_SESSION["unit"];
 		$orders = explode(";",$cmd);
+		$round = 0;
 		foreach($orders as $order) {
 			list($p,$a,$q) = explode(",",$order);
-			$db->query("INSERT INTO desired_event (priority, action, quantity) VALUES ('$p', '$a', '$q');");
+			$db->query("INSERT INTO desired_event (unit, priority, action, quantity, round) VALUES ('$unit','$p', '$a', '$q','$round');");
+			$round++;
 		}
 		print "{}";
 		break;
