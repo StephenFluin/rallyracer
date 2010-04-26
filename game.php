@@ -4,6 +4,7 @@
 require("functions.inc.php");
 session_destroy();
 $db->query("TRUNCATE TABLE player;");
+updateGamesTable();
 ?>
 <head>
 <title>Rally Racer Web</title>
@@ -76,7 +77,7 @@ x
 y
 rot
 */
-function runEventQueueInstance(data) {
+function runEventQueueInstance(data, continued) {
 	if(data && data.length > 0 ) {
 		debug("processing event queue with " + data.length + " items.");
 		console.log("Processing from server: ");
@@ -95,11 +96,12 @@ function runEventQueueInstance(data) {
 			var obj = document.getElementById("tank" + event[i].unit);
 			setPosition(obj,event[i].x,event[i].y,event[i].rot);
 		}
-		window.setTimeout(function () {runEventQueueInstance(data)},3000);
+		window.setTimeout(function () {runEventQueueInstance(data,true)},3000);
 			
 	} else {
 		debug("No data in event queue.");
-		window.setTimeout(runEventQueue,1000);
+		if(continued) {runEventQueue();}
+		else {	window.setTimeout(runEventQueue,1000);}
 	}
 }
 function debug(msg) {
