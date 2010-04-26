@@ -42,14 +42,23 @@ switch($action) {
 		print "{}";
 		break;
 	case "sendCommand":
-		$cmd = $db->escape($_GET["command"]);
 		$unit = $_SESSION["unit"];
-		$orders = explode(";",$cmd);
-		$round = 0;
-		foreach($orders as $order) {
-			if( list($p,$a,$q) = explode(",",$order)) {
-				$db->query("INSERT INTO desired_event (unit, priority, action, quantity, round) VALUES ('$unit','$p', '$a', '$q','$round');");
-				$round++;
+		$cmd = $db->escape($_GET["command"]);
+		
+		
+		$db->query("SELECT count(*) FROM desired_event WHERE unit='$unit';");
+		list($count) = $db->fetchrow();
+		if($count == 0) {
+			
+		
+		
+			$orders = explode(";",$cmd);
+			$round = 0;
+			foreach($orders as $order) {
+				if( list($p,$a,$q) = explode(",",$order)) {
+					$db->query("INSERT INTO desired_event (unit, priority, action, quantity, round) VALUES ('$unit','$p', '$a', '$q','$round');");
+					$round++;
+				}
 			}
 		}
 		print "{}";
