@@ -1,25 +1,30 @@
 <?php
 require("functions.inc.php");
 $db = new DB();
-
+debug("in event-server, gameid is " . $_SESSION["gameid"]);
 $action = $_GET["action"];
 if($action == "getPending") {
-	processEvents();
-	$round = array();
-	$previousRound = 0;
-	$db->query("SELECT unit,x,y,rot,round FROM pending_event ORDER BY round ASC;");
-	while($row = $db->fetchassoc()) {
-		if($row["round"] != $previousRound) {
-			$data[] = $round;
-			$round = array();
+	if(processEvents()) {
+		$round = array();
+		$previousRound = 0;
+		$db->query("SELECT unit,x,y,rot,round FROM pending_event ORDER BY round ASC;");
+		while($row = $db->fetchassoc()) {
+			if($row["round"] != $previousRound) {
+				$data[] = $round;
+				$round = array();
+			}
+			$round[] = $row;
 		}
-		$round[] = $row;
-	}
-	
-	if($round) {
-		$data[] = $round;
-	}
-	if($db->size() == 0) {
+		
+		if($round) {
+			$data[] = $round;
+		}
+		if($db->size() == 0) {
+			$data = array();
+		} else {
+			$db->query("TRUNCATE pending_event;");	
+		}
+	} else {
 		$data = array();
 	}
 	
@@ -32,7 +37,7 @@ if($action == "getPending") {
 	print json_encode($data);
 
 
-	$db->query("TRUNCATE pending_event;");	
+
 } else if ($action == "addPending") {
 // Debug only, used to add events into DB.
 	$unit = 0;

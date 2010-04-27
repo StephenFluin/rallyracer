@@ -3,6 +3,7 @@
 <?php 
 require("functions.inc.php");
 session_destroy();
+session_start();
 $db->query("TRUNCATE TABLE player;");
 updateGamesTable();
 ?>
@@ -77,16 +78,17 @@ x
 y
 rot
 */
-function runEventQueueInstance(data, continued) {
+function runEventQueueInstance(data, textStatus) {
 	if(data && data.length > 0 ) {
 		debug("processing event queue with " + data.length + " items.");
-		console.log("Processing from server: ");
+		//console.log("Processing from server: ");
 		console.log(data);
 	} else {
 		if(!data) {
 			console.log("invalid data received from server.");
+		} else {
+			//	console.log("Data length was " + data.length);
 		}
-		console.log("No data, or data length was " + data.length);
 	}
 	
 	if(data.length > 0) {
@@ -99,8 +101,7 @@ function runEventQueueInstance(data, continued) {
 		window.setTimeout(function () {runEventQueueInstance(data,true)},3000);
 			
 	} else {
-		debug("No data in event queue.");
-		if(continued) {runEventQueue();}
+		if(textStatus=="true") {runEventQueue;}
 		else {	window.setTimeout(runEventQueue,1000);}
 	}
 }

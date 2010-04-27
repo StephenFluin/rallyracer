@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+
 $GLOBALS["dbHost"] = "localhost";
 $GLOBALS["dbUser"] = "rallyracer";
 $GLOBALS["dbPass"] = "racerrally";
@@ -25,7 +26,8 @@ class DB {
 
         function query($query = "") {
                 $this->results = mysql_query($query,$this->conn );
-                if(!$this->results && !$this->quiet) {
+                debug($query);
+		if(!$this->results && !$this->quiet) {
                         print "Server Error: (" . mysql_error($this->conn) . ") '$query'.";
                 }
                 return $this->results;
@@ -63,6 +65,7 @@ function processEvents() {
 		$_SESSION["positions"][] = array(6,4,180);
 		
 		updatePositions();
+		return true;
 	}
 	
 	
@@ -71,19 +74,25 @@ function processEvents() {
 	* then process the desired moves and send them to the game screen via pending event..
 	*/
 	// Check if we have all players.
-	$db->query("SELECT max(unit) FROM player WHERE gameid=(SELECT max(id) FROM game)");
-	list($players) = $db->fetchrow();
-	if($players != "") {
-		$players += 1;
-	}
-	$db->query("SELECT count(*) FROM desired_event WHERE gameid=(SELECT max(id) FROM game)");
+	$gameid = $_SESSION["gameid"];
+	
+	$db->query("SELECT count(*) FROM desired_event WHERE gameid=($gameid)");
 	list($count) = $db->fetchrow();
 	
-	if($players > 0 && $count >= $players * 5) {
+	if($count > 0) {
+		$db->query("SELECT max(unit) FROM player WHERE gameid=($gameid)");
+		list($players) = $db->fetchrow();
+		if($players != "") {
+			$players += 1;
+		}
+	}
+	
+	
+	if($count > 0  && $players > 0 && $count >= $players * 5) {
 		for($player = 0;$player < $players;$player++) {
 		
 			$pos = $_SESSION["positions"][$player];
-			$db->query("SELECT unit, priority, action, quantity, round FROM desired_event WHERE unit='$player' AND gameid=(SELECT max(id) FROM game) ORDER BY id ASC;");
+			$db->query("SELECT unit, priority, action, quantity, round FROM desired_event WHERE unit='$player' AND gameid=($gameid) ORDER BY id ASC;");
 			while(list($u, $p,$a,$q, $round) = $db->fetchrow()) {
 				for($i = 0;$i < $q;$i++) {
 					$xChange = $yChange = $rotChange = 0;
@@ -110,27 +119,32 @@ function processEvents() {
 							$rotChange = -90;
 						break;
 					}
-					//print "From: $pos[0]x$pos[1] with $pos[2], we are acting on $a.<br/>\n";
+					debug( "From: $pos[0]x$pos[1] with $pos[2], we are acting on $a.<br/>\n");
 					$x = $pos[0] += $xChange;
 					$y = $pos[1] += $yChange;
 					$rot = $pos[2] += $rotChange;
 					
-					//print "xchange is $xChange, ychange is $yChange, rotChange is $rotChange.<br/>\n";
+					debug( "xchange is $xChange, ychange is $yChange, rotChange is $rotChange.<br/>\n");
 				}
-				$db2->query("INSERT INTO pending_event (unit, x,y,rot, round,gameid) VALUES ('$u','$x','$y','$rot', '$round', (SELECT max(id) FROM game));");
+				$db2->query("INSERT INTO pending_event (unit, x,y,rot, round,gameid) VALUES ('$u','$x','$y','$rot', '$round', ($gameid));");
 			}
-			$db->query("DELETE FROM desired_event where gameid=(SELECT max(id) FROM game) and unit='$player';");
+			$db->query("DELETE FROM desired_event where gameid=($gameid) and unit='$player';");
 			$_SESSION["positions"][$player] = $pos;
 		}
+		return true;
+	} else {
+		debug("count was $count, $players players,  so failure to run rounds.");
+		return false;
 	}
 }
 
 
 function updatePositions() {
 	$db = new DB();
+	$gameid = $_SESSION["gameid"];
 	foreach($_SESSION["positions"] as $unit=>$pos) {
 		list($x,$y,$r) = $pos;
-		$db->query("INSERT INTO pending_event (unit, x,y,rot, gameid) VALUES ('$unit','$x','$y','$r', (SELECT max(id) FROM game));");
+		$db->query("INSERT INTO pending_event (unit, x,y,rot, gameid) VALUES ('$unit','$x','$y','$r', ($gameid));");
 	}
 }
 
@@ -138,7 +152,15 @@ function updateGamesTable() {
 	$db = new DB();
 	$db->query("DELETE FROM game WHERE created < (Now() - (60 * 60))");
 	$db->query("INSERT INTO game VALUES ();");
+	$_SESSION["gameid"] = $db->insertid();
+	debug("gameid is " . $_SESSION["gameid"]);
 	return $db->insertid();
 }
 	
 	
+function debug($msg) {
+	$fp = fopen("rally.log", "a");
+	fwrite($fp,$msg . "\n");
+	
+}
+
