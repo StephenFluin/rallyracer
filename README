@@ -1,0 +1,4 @@
+Setup:
+1. create the database using rallyracer.sql
+settings for the database can be viewed and modified in functions.inc.php
+2. create a file rally.log and make it writable for the web browser.
