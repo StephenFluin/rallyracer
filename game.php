@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <?php 
 require("functions.inc.php");
 session_destroy();
@@ -7,6 +5,8 @@ session_start();
 $db->query("TRUNCATE TABLE player;");
 updateGamesTable();
 ?>
+<!DOCTYPE html>
+<html>
 <head>
 <title>Rally Racer Web</title>
 <script src="http://code.jquery.com/jquery-latest.js"></script>

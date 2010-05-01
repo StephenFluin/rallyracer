@@ -44,3 +44,259 @@ count was 0,  players,  so failure to run rounds.
 in event-server, gameid is 61
 SELECT count(*) FROM desired_event WHERE gameid=(61)
 count was 0,  players,  so failure to run rounds.
+TRUNCATE TABLE player;
+DELETE FROM game WHERE created < (Now() - (60 * 60))
+INSERT INTO game VALUES ();
+gameid is 120
+in event-server, gameid is 120
+INSERT INTO pending_event (unit, x,y,rot, gameid) VALUES ('0','4','4','180', (120));
+INSERT INTO pending_event (unit, x,y,rot, gameid) VALUES ('1','5','4','180', (120));
+INSERT INTO pending_event (unit, x,y,rot, gameid) VALUES ('2','6','4','180', (120));
+SELECT unit,x,y,rot,round FROM pending_event ORDER BY round ASC;
+TRUNCATE pending_event;
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
+in event-server, gameid is 120
+SELECT count(*) FROM desired_event WHERE gameid=(120)
+count was 0,  players,  so failure to run rounds.
