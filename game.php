@@ -18,15 +18,20 @@ var h, w;
 
 function initialDraw() {
 	drawBoard();
-	drawPieces();
 }
 function drawBoard() {
+	h = window.innerHeight - 50;
+	w = window.innerWidth - 50;
 	var gameBoard = document.getElementById('board');
 	var context = gameBoard.getContext("2d");
-	h = gameBoard.height;
-	w = gameBoard.width;
-	
-	
+	if (w/h > 1.5) {
+		w = h*1.5;
+	} else {
+		h = w/1.5;
+	}
+	//TODO: at some point, we can make it resize when the screen resizes
+	gameBoard.width = w;
+	gameBoard.height = h;
 	
 	var tileW = Math.round(w / tileX);
 	var tileH = Math.round(h / tileY);
@@ -38,12 +43,6 @@ function drawBoard() {
 			context.fillRect(0,yoffset,w,1);
 		}
 	}
-}
-function drawPieces() {
-	tank = [];
-	tank[0] = document.getElementById("tank0");
-	//setPosition(tank[0],3,0,180);
-	
 }
 function setPosition(element, x, y,rot) {
 	debug("setposition to " + x + "x" + y + " and " + rot + ".");
@@ -119,12 +118,6 @@ function addMovement(x,y,rot) {
 	$.get("event-server.php?action=addPending&x=" +x +"&y=" + y+"&rot=" + rot);
 	console.log("AJAX GET sent to: " + "event-server.php?action=addPending&x=" +x +"&y=" + y+"&rot=" + rot);
 }
-function left() {addMovement(-1);}
-function right() {addMovement(1);}
-function up() {addMovement(0,-1);}
-function down() {addMovement(0,1);}
-function clock() {addMovement(0,0,90);}
-function counterclock() {addMovement(0,0,-90);}
 
 window.setTimeout(runEventQueue,1000);
 </script>
@@ -148,8 +141,6 @@ You should upgrade to a browser that supports the internet.</canvas>
 <img src="images/tank1.png" alt="Tank 1" id="tank1" class="pawn"/>
 <img src="images/tank2.png" alt="Tank 2" id="tank2" class="pawn"/>
 </div>
-
-
 
 <div id="debug">Debug Data</div>
 
