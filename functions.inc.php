@@ -24,11 +24,12 @@ class DB {
                 }
         }
 
-        function query($query = "") {
+        function query($query = "", $debug = false) {
                 $this->results = mysql_query($query,$this->conn );
-                debug($query);
+                if ($debug) debug($query);
 		if(!$this->results && !$this->quiet) {
                         print "Server Error: (" . mysql_error($this->conn) . ") '$query'.";
+                        debug("Server Error: (" . mysql_error($this->conn) . ") '$query'.");
                 }
                 return $this->results;
         }
@@ -49,7 +50,9 @@ class DB {
 	}
 }
 
-/* This is run every 1 second does detection of game events that affect the board, or everyone.
+/* This is run every 1 second. It does detection of game events that affect the board, or everyone.
+*	Should return true if there are new positions to show to the screen.
+*	Should return false if there is nothing new for the screen.
 */
 function processEvents() {
 	$db = new DB();
@@ -144,7 +147,7 @@ function updatePositions() {
 	$gameid = $_SESSION["gameid"];
 	foreach($_SESSION["positions"] as $unit=>$pos) {
 		list($x,$y,$r) = $pos;
-		$db->query("INSERT INTO pending_event (unit, x,y,rot, gameid) VALUES ('$unit','$x','$y','$r', ($gameid));");
+		$db->query("INSERT INTO pending_event (unit, x,y,rot, gameid) VALUES ('$unit','$x','$y','$r', ($gameid));", true);
 	}
 }
 

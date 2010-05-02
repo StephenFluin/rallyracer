@@ -1,31 +1,21 @@
 <?php
 require("functions.inc.php");
 $db = new DB();
-debug("in event-server, gameid is " . $_SESSION["gameid"]);
 $action = $_GET["action"];
 if($action == "getPending") {
+	$data = array();
+	$gameid = $_SESSION["gameid"];
 	if(processEvents()) {
-		$round = array();
-		$previousRound = 0;
-		$db->query("SELECT unit,x,y,rot,round FROM pending_event ORDER BY round ASC;");
-		while($row = $db->fetchassoc()) {
-			if($row["round"] != $previousRound) {
-				$data[] = $round;
-				$round = array();
-			}
-			$round[] = $row;
-		}
 		
-		if($round) {
-			$data[] = $round;
+		$db->query("SELECT unit,x,y,rot,round FROM pending_event WHERE gameId='$gameid' ORDER BY round ASC;",true);
+		
+		while($row = $db->fetchassoc()) {
+			$data[(int)$row["round"]][] = $row;
 		}
-		if($db->size() == 0) {
-			$data = array();
-		} else {
-			$db->query("TRUNCATE pending_event;");	
+		if($db->size() > 0) {
+			$db->query("DELETE FROM pending_event WHERE gameId='$gameid';",true);
+			
 		}
-	} else {
-		$data = array();
 	}
 	
 	
@@ -35,6 +25,8 @@ if($action == "getPending") {
 	// Rounds[Round[obj]]
 
 	print json_encode($data);
+	debug("Display this data to screen: " . json_encode($data));
+	debug(print_r($_SESSION["positions"],true));
 
 
 

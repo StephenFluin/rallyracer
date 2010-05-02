@@ -8,7 +8,7 @@ updateGamesTable();
 <!DOCTYPE html>
 <html>
 <head>
-<title>Rally Racer Web</title>
+<title>Rally Racer Web  - Game <?php echo $_SESSION["gameid"]; ?></title>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
 var tileX = 12;
@@ -64,7 +64,11 @@ function setPosition(element, x, y,rot) {
 function runEventQueue() {
 	debug("Event queue running.");
 	console.log("Event queue running.");
-	$.getJSON('event-server.php?action=getPending',runEventQueueInstance);
+	// This fails silently, what can we do about this?
+	$.ajax({
+		url: 'event-server.php?action=getPending',
+		dataType: 'json',
+		success:runEventQueueInstance});
 	
 	//runEventQueueInstance([[{id:"tank0",x:5,y:4,rot:270}],[{id:"tank0",x:10,y:8,rot:90}]]);
 	
@@ -97,11 +101,12 @@ function runEventQueueInstance(data, textStatus) {
 			var obj = document.getElementById("tank" + event[i].unit);
 			setPosition(obj,event[i].x,event[i].y,event[i].rot);
 		}
+		// It is extremely important that this timeout matches the animation length, otherwise things will happen too soon.
 		window.setTimeout(function () {runEventQueueInstance(data,true)},3000);
 			
 	} else {
 		if(textStatus=="true") {runEventQueue;}
-		else {	window.setTimeout(runEventQueue,1000);}
+		else {	window.setTimeout(runEventQueue,5000);}
 	}
 }
 function debug(msg) {
