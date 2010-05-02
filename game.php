@@ -16,9 +16,7 @@ var tileY = 10;
 var pieceSize = 54;
 var h, w;
 
-function initialDraw() {
-	drawBoard();
-}
+
 function drawBoard() {
 	h = window.innerHeight - 50;
 	w = window.innerWidth - 50;
@@ -68,10 +66,18 @@ function runEventQueue() {
 	$.ajax({
 		url: 'event-server.php?action=getPending',
 		dataType: 'json',
-		success:runEventQueueInstance});
+		success:runEventQueueInstance,
+		complete:runCompletedEvent});
 	
 	//runEventQueueInstance([[{id:"tank0",x:5,y:4,rot:270}],[{id:"tank0",x:10,y:8,rot:90}]]);
 	
+}
+
+function runCompletedEvent(data, status) {
+	//debug("AJAX QUERY COMPLETED" + data + " and " + status);
+	if(status == "parsererror") {
+		debug("Parse Error from event-server.php: " + data.responseText);
+	}
 }
 
 /*
@@ -138,7 +144,7 @@ canvas {border-radius:25px;border:1px solid black;margin:auto auto;}
 body {overflow:hidden;}
 </style>
 </head>
-<body onload="initialDraw()">
+<body onload="drawBoard()">
 <div id="pane">
 <canvas id="board" width="1200" height="800">
 You should upgrade to a browser that supports the internet.</canvas>

@@ -53,7 +53,7 @@ switch($action) {
 		$cmd = $db->escape($_GET["command"]);
 		
 		
-		$db->query("SELECT count(*) FROM desired_event WHERE unit='$unit' AND gameid=($gameid);");
+		$db->query("SELECT count(*) FROM desired_event WHERE unit='$unit' AND gameid=($gameid);",true);
 		list($count) = $db->fetchrow();
 		if($count == 0) {
 			
@@ -64,7 +64,7 @@ switch($action) {
 			array_pop($orders);
 			foreach($orders as $order) {
 				if( list($p,$a,$q) = explode(",",$order)) {
-					$db->query("INSERT INTO desired_event (gameid, unit, priority, action, quantity, round) VALUES (($gameid), '$unit','$p', '$a', '$q','$round');");
+					$db->query("INSERT INTO desired_event (gameid, unit, priority, action, quantity, round) VALUES (($gameid), '$unit','$p', '$a', '$q','$round');",true);
 					$round++;
 				}
 			}

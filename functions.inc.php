@@ -67,7 +67,13 @@ function processEvents() {
 		$_SESSION["positions"][] = array(5,4,180);
 		$_SESSION["positions"][] = array(6,4,180);
 		
-		updatePositions();
+		// Send these new positons to the board
+		$db = new DB();
+		$gameid = $_SESSION["gameid"];
+		foreach($_SESSION["positions"] as $unit=>$pos) {
+			list($x,$y,$r) = $pos;
+			$db->query("INSERT INTO pending_event (unit, x,y,rot, gameid) VALUES ('$unit','$x','$y','$r', ($gameid));", true);
+		}
 		return true;
 	}
 	
@@ -88,52 +94,14 @@ function processEvents() {
 		if($players != "") {
 			$players += 1;
 		}
+		$_SESSION["players"] = $players;
 	}
 	
 	
+	
 	if($count > 0  && $players > 0 && $count >= $players * 5) {
-		for($player = 0;$player < $players;$player++) {
+		convertDesires($gameid, $players);
 		
-			$pos = $_SESSION["positions"][$player];
-			$db->query("SELECT unit, priority, action, quantity, round FROM desired_event WHERE unit='$player' AND gameid=($gameid) ORDER BY id ASC;");
-			while(list($u, $p,$a,$q, $round) = $db->fetchrow()) {
-				for($i = 0;$i < $q;$i++) {
-					$xChange = $yChange = $rotChange = 0;
-					
-					switch($a) {
-						case "b":
-						case "f":
-							// 90 - flips direction of rotation for true math and javascript
-							$yChange = -1*sin(deg2rad(90-$pos[2]));
-							$xChange = cos(deg2rad(90-$pos[2]));
-							
-							if($a =="b"){
-								$xChange *= -1;
-								$yChange *= -1;
-							}
-						break;
-				
-						
-						case "r":
-							$rotChange = 90;
-						break;
-						
-						case "l":
-							$rotChange = -90;
-						break;
-					}
-					debug( "From: $pos[0]x$pos[1] with $pos[2], we are acting on $a.<br/>\n");
-					$x = $pos[0] += $xChange;
-					$y = $pos[1] += $yChange;
-					$rot = $pos[2] += $rotChange;
-					
-					debug( "xchange is $xChange, ychange is $yChange, rotChange is $rotChange.<br/>\n");
-				}
-				$db2->query("INSERT INTO pending_event (unit, x,y,rot, round,gameid) VALUES ('$u','$x','$y','$rot', '$round', ($gameid));");
-			}
-			$db->query("DELETE FROM desired_event where gameid=($gameid) and unit='$player';");
-			$_SESSION["positions"][$player] = $pos;
-		}
 		return true;
 	} else {
 		debug("count was $count, $players players,  so failure to run rounds.");
@@ -141,16 +109,76 @@ function processEvents() {
 	}
 }
 
-
-function updatePositions() {
+// Process all of the desires for the current game into actual board movements..
+function convertDesires($gameid,$players) {
 	$db = new DB();
-	$gameid = $_SESSION["gameid"];
-	foreach($_SESSION["positions"] as $unit=>$pos) {
-		list($x,$y,$r) = $pos;
-		$db->query("INSERT INTO pending_event (unit, x,y,rot, gameid) VALUES ('$unit','$x','$y','$r', ($gameid));", true);
+	$db->query("SELECT unit, priority, action, quantity, round FROM desired_event WHERE unit='$player' AND gameid=($gameid) ORDER BY round ASC, priority DESC;");
+	
+		
+	while(list($u, $p,$a,$q, $round) = $db->fetchrow()) {
+		
+		$xChange = $yChange = $rotChange = 0;
+		$pos = $_SESSION["positions"][$u];
+		if($a == "b" || $a == "f") {
+			for($i = 0;$i < $q;$i++) {
+				
+				// 90 - flips direction of rotation for true math and javascript
+				$yChange = round(-1*sin(deg2rad(90-$pos[2])));
+				$xChange = round(cos(deg2rad(90-$pos[2])));
+				
+				if($a =="b"){
+					$xChange *= -1;
+					$yChange *= -1;
+				}
+				moveUnit($u,$round,$xChange,$yChange, 0);
+			}
+		}
+		if($a == "r" || $a == "l") {
+	
+			if($a == "r") {
+				$rotChange = 90 * $q;
+			} else {
+			
+			
+				$rotChange = -90 * $q;
+			}
+			moveUnit($u,$round,0,0,$rotChange);
+		}
+		
 	}
+	$db->query("DELETE FROM desired_event where gameid=($gameid);",true);
+	$_SESSION["positions"][$player] = $pos;
+	
+}
+/** 
+*   Recursively takes in unit changes and affects surrounding units. 
+*   Once all movement is resolved, they are inserted into pending_event.
+*/
+function moveUnit($unit, $round, $xChange, $yChange, $rotChange) {
+	debug("moveUnit($unit, $round, $xChange, $yChange, $rotChange);");
+	$db = new DB();
+	$x = $_SESSION["positions"][$unit][0] + $xChange;
+	$y = $_SESSION["positions"][$unit][1] + $yChange;
+	$rot = $_SESSION["positions"][$unit][2] + $rotChange;
+	
+	if(!$rotChange) {
+		for($i = 0;$i <= count($_SESSION["positions"]);$i++) {
+			if($i != u && $x == $_SESSION["positions"][$i][0] && $y == $_SESSION["positions"][$i][1]) {
+				// Collision with other unit, apply same x and ychanges to that unit.
+				moveUnit($i,$round,$xChange,$yChange,$rotChange);
+			}
+		}
+		
+	}
+			
+	$gameid = $_SESSION["gameid"];
+	$db->query("INSERT INTO pending_event (unit, x,y,rot, round,gameid) VALUES ('$unit','$x','$y','$rot', '$round', ($gameid));",true);
+	$_SESSION["positions"][$unit][0] = $x;
+	$_SESSION["positions"][$unit][1] = $y;
+	$_SESSION["positions"][$unit][2] = $rot;
 }
 
+// Create an ID for this game. Clean out old games (like cron)
 function updateGamesTable() {
 	$db = new DB();
 	$db->query("DELETE FROM game WHERE created < (Now() - (60 * 60))");
@@ -160,7 +188,7 @@ function updateGamesTable() {
 	return $db->insertid();
 }
 	
-	
+// Write a message to the log file.
 function debug($msg) {
 	$fp = fopen("rally.log", "a");
 	fwrite($fp,$msg . "\n");
